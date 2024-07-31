@@ -13,10 +13,15 @@ logging:
 
 spring:
   datasource:
-    url: jdbc:h2:mem:board;mode=mysql
+    url: jdbc:mysql://localhost:3306/board
     username: yjj
     password: yjj
-    driver-class-name: org.h2.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+#  datasource:
+#    url: jdbc:h2:mem:testdb;mode=mysql
+#    username: sa
+#    driver-class-name: org.h2.Driver
 
   jpa:
     defer-datasource-initialization: true
@@ -34,6 +39,6 @@ spring:
     init:
       mode: always
 
-  config:
-    activate:
-      on-profile: testdb
+#  config:
+#    activate:
+#      on-profile: testdb

@@ -24,7 +24,7 @@
         <div class="row g-5">
             <section class="col-md-3 col-lg-4 order-md-last">
                 <aside>
-                    <p><span id="nickname">Uno</span></p>
+                    <p><span id="nickname">Yjj</span></p>
                     <p><a id="email" href="mailto:test@gmail.com">yjj@mail.com</a></p>
                     <p><time id="created-at" datetime="2024-08-08T00:00:00">2024-08-08</time></p>
                     <p><span id="hashtag" class="badge text-bg-secondary mx-1"><a class="text-reset">#java</a></span></p>
@@ -36,21 +36,30 @@
             </article>
         </div>
 
+        <div class="row g-5" id="article-buttons">
+            <form id="delete-article-form">
+                <div class="pb-5 d-grid gap-2 d-md-block">
+                    <a class="btn btn-success me-md-2" role="button" id="update-article">수정</a>
+                    <button class="btn btn-danger me-md-2" type="submit">삭제</button>
+                </div>
+            </form>
+        </div>
+
         <div class="row g-5">
             <section>
                 <form class="row g-3">
-                    <div class="col-8">
+                    <div class="col-md-9 col-lg-8">
                         <label for="comment-textbox" hidden>댓글</label>
                         <textarea class="form-control" id="comment-textbox" placeholder="댓글 쓰기.." rows="3" required></textarea>
                     </div>
-                    <div class="col-auto">
+                    <div class="col-md-3 col-lg-4">
                         <label for="comment-submit" hidden>댓글 쓰기</label>
                         <button class="btn btn-primary" id="comment-submit" type="submit">쓰기</button>
                     </div>
                 </form>
-                <ul id="article-comments" class="row col-7">
+                <ul id="article-comments" class="row col-md-10 col-lg-8 pt-3">
                     <li>
-                        <div>
+                        <div class="row">
                             <strong>Yjj</strong>
                             <small><time>2024-08-08</time></small>
                             <p>
@@ -61,9 +70,9 @@
                     </li>
 
                     <li>
-                        <div>
+                        <div class="row">
+                            <strong>Yjj2</strong>
                             <time><small>2024-08-08</small></time>
-                            <strong>Yjj</strong>
                             <p>
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>
                                 Lorem ipsum dolor sit amet

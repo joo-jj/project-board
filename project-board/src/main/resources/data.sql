@@ -1,7 +1,7 @@
 -- 테스트 계정
 -- TODO: 테스트용이지만 비밀번호가 노출된 데이터 세팅. 개선하는 것이 좋을 지 고민해 보자.
-insert into user_account (user_id, user_password, nickname, email, memo, created_at, created_by, modified_at, modified_by) values('yjj','12345qwert','yjj', 'yjj@mail.com', 'I am Yjj.', now(),'yjj', now(), 'yjj');
-insert into user_account (user_id, user_password, nickname, email, memo, created_at, created_by, modified_at, modified_by) values('yjj2', '12345qwert','yjj2', 'yjj2@mail.com', 'I am Yjj2.', now(),'yjj2', now(), 'yjj2');
+insert into user_account (user_id, user_password, nickname, email, memo, created_at, created_by, modified_at, modified_by) values('yjj','{noop}12345qwert','yjj', 'yjj@mail.com', 'I am Yjj.', now(),'yjj', now(), 'yjj');
+insert into user_account (user_id, user_password, nickname, email, memo, created_at, created_by, modified_at, modified_by) values('yjj2', '{noop}12345qwert','yjj2', 'yjj2@mail.com', 'I am Yjj2.', now(),'yjj2', now(), 'yjj2');
 -- insert into user_account (user_password, nickname, email, memo, created_at, created_by, modified_at, modified_by) values('yjj3', '12345qwert', 'YJJ3', 'yjj3@mail.com', 'I am Yjj3.', now(), 'yjj3', now(), 'yjj3');
 
 -- 123 게시글

@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
+<!-- 스프링 시큐리티 인증을 받은 로그인 한 사용자의 정보를 받아올때 sec:authorize -->
 <thlogic>
     <attr sel="#home" th:href="@{/}" />
     <attr sel="#hashtag" th:href="@{/articles/search-hashtag}" />
+    <attr sel="#username" sec:authorize="isAuthenticated()" sec:authentication="name" />
+    <attr sel="#login" sec:authorize="!isAuthenticated()" th:href="@{/login}" />
+    <attr sel="#logout" sec:authorize="isAuthenticated()" th:href="@{/logout}" />
 </thlogic>

@@ -6,6 +6,7 @@ import com.yjj.projectboard.domain.constant.FormStatus;
 import com.yjj.projectboard.domain.constant.SearchType;
 import com.yjj.projectboard.dto.ArticleDto;
 import com.yjj.projectboard.dto.ArticleWithCommentsDto;
+import com.yjj.projectboard.dto.HashtagDto;
 import com.yjj.projectboard.dto.UserAccountDto;
 import com.yjj.projectboard.dto.request.ArticleRequest;
 import com.yjj.projectboard.dto.response.ArticleResponse;
@@ -72,8 +73,9 @@ class ArticleControllerTest {
                 .andExpect(view().name("articles/index"))
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(model().attributeExists("articles"))
-                .andExpect(model().attributeExists("paginationBarNumbers"));
-//                .andExpect(model().attributeExists("searchTypes"));
+                .andExpect(model().attributeExists("paginationBarNumbers"))
+                .andExpect(model().attributeExists("searchTypes"))
+                .andExpect(model().attribute("searchTypeHashtag", SearchType.HASHTAG));
         then(articleService).should().searchArticles(eq(null), eq(null), any(Pageable.class));
         then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
     }
@@ -148,7 +150,7 @@ class ArticleControllerTest {
     @WithMockUser
     @DisplayName("[view][GET] 게시글 상세 페이지 - 정상 호출, 인증된 사용자")
     @Test
-    void givenNothing_whenRequestingArticleView_thenReturnsArticleView() throws Exception {
+    void givenAuthorizedUser_whenRequestingArticleView_thenReturnsArticleView() throws Exception {
         // Given
         Long articleId = 1L;
         long totalCount =1;
@@ -160,7 +162,9 @@ class ArticleControllerTest {
                 .andExpect(view().name("articles/detail"))
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(model().attributeExists("article"))
-                .andExpect(model().attributeExists("articleComments"));
+                .andExpect(model().attributeExists("articleComments"))
+                .andExpect(model().attribute("totalCount", totalCount))
+                .andExpect(model().attribute("searchTypeHashtag", SearchType.HASHTAG));
         then(articleService).should().getArticleWithComments(articleId);
         then(articleService).should().getArticleCount();
     }
@@ -229,7 +233,7 @@ class ArticleControllerTest {
     @WithMockUser
     @DisplayName("[view][GET] 새 게시글 작성 페이지")
     @Test
-    void givenAuthorizedUser_whenRequesting_thenReturnsNewArticlePage() throws Exception {
+    void givenNothing_whenRequesting_thenReturnsNewArticlePage() throws Exception {
         // Given
 
         // When & Then
@@ -245,7 +249,7 @@ class ArticleControllerTest {
     @Test
     void givenNewArticleInfo_whenRequesting_thenSavesNewArticle() throws Exception {
         // Given
-        ArticleRequest articleRequest = ArticleRequest.of("new title", "new content", "#new");
+        ArticleRequest articleRequest = ArticleRequest.of("new title", "new content");
         willDoNothing().given(articleService).saveArticle(any(ArticleDto.class));
 
         // When & Then
@@ -277,7 +281,7 @@ class ArticleControllerTest {
     @WithMockUser
     @DisplayName("[view][GET] 게시글 수정 페이지 - 정상 호출, 인증된 사용자")
     @Test
-    void givenNothing_whenRequesting_thenReturnsUpdatedArticlePage() throws Exception {
+    void givenAuthorizedUser_whenRequesting_thenReturnsUpdatedArticlePage() throws Exception {
         // Given
         long articleId = 1L;
         ArticleDto dto = createArticleDto();
@@ -299,7 +303,7 @@ class ArticleControllerTest {
     void givenUpdatedArticleInfo_whenRequesting_thenUpdatesNewArticle() throws Exception {
         // Given
         long articleId = 1L;
-        ArticleRequest articleRequest = ArticleRequest.of("new title", "new content", "#new");
+        ArticleRequest articleRequest = ArticleRequest.of("new title", "new content");
         willDoNothing().given(articleService).updateArticle(eq(articleId), any(ArticleDto.class));
 
         // When & Then
@@ -328,9 +332,9 @@ class ArticleControllerTest {
 
         // When & Then
         mvc.perform(
-                        post("/articles/" + articleId + "/delete")
-                                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                                .with(csrf())
+                post("/articles/" + articleId + "/delete")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .with(csrf())
                 )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/articles"))
@@ -344,7 +348,7 @@ class ArticleControllerTest {
                 createUserAccountDto(),
                 "title",
                 "content",
-                "#java"
+                Set.of(HashtagDto.of("java"))
         );
     }
 
@@ -355,7 +359,7 @@ class ArticleControllerTest {
                 Set.of(),
                 "title",
                 "content",
-               "#java",
+                Set.of(HashtagDto.of("java")),
                 LocalDateTime.now(),
                 "yjj",
                 LocalDateTime.now(),

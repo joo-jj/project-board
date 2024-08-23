@@ -2,7 +2,6 @@ package com.yjj.projectboard.controller;
 
 import com.yjj.projectboard.domain.constant.FormStatus;
 import com.yjj.projectboard.domain.constant.SearchType;
-import com.yjj.projectboard.dto.UserAccountDto;
 import com.yjj.projectboard.dto.request.ArticleRequest;
 import com.yjj.projectboard.dto.response.ArticleResponse;
 import com.yjj.projectboard.dto.response.ArticleWithCommentsResponse;
@@ -103,7 +102,7 @@ public class ArticleController {
         return "articles/form";
     }
 
-    @PostMapping ("/{articleId}/form")
+    @PostMapping("/{articleId}/form")
     public String updateArticle(@PathVariable Long articleId, ArticleRequest articleRequest,
                                 @AuthenticationPrincipal BoardPrincipal boardPrincipal) {
         articleService.updateArticle(articleId, articleRequest.toDto(boardPrincipal.toDto()));
@@ -111,7 +110,7 @@ public class ArticleController {
         return "redirect:/articles/" + articleId;
     }
 
-    @PostMapping ("/{articleId}/delete")
+    @PostMapping("/{articleId}/delete")
     public String deleteArticle(
             @PathVariable Long articleId,
             @AuthenticationPrincipal BoardPrincipal boardPrincipal

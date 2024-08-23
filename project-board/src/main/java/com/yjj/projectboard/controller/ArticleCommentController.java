@@ -1,6 +1,5 @@
 package com.yjj.projectboard.controller;
 
-import com.yjj.projectboard.dto.UserAccountDto;
 import com.yjj.projectboard.dto.request.ArticleCommentRequest;
 import com.yjj.projectboard.dto.security.BoardPrincipal;
 import com.yjj.projectboard.service.ArticleCommentService;

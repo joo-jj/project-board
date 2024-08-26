@@ -236,7 +236,7 @@ class ArticleServiceTest {
     void givenModifiedArticleInfo_whenUpdatingArticle_thenUpdatesArticle(){
         // Given
         Article article = createArticle();
-        ArticleDto dto = createArticleDto("새 타이틀", "새 내용");
+        ArticleDto dto = createArticleDto("새 타이틀", "새 내용 #springboot");
         Set<String> expectedHashtagNames = Set.of("springboot");
         Set<Hashtag> expectedHashtags = new HashSet<>();
 

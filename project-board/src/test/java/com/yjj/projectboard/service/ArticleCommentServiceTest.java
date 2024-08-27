@@ -62,7 +62,7 @@ class ArticleCommentServiceTest {
         .extracting("id", "articleId", "parentCommentId", "content")
                 .containsExactlyInAnyOrder(
                         tuple(1L, 1L, null, "parent content"),
-                        tuple(2L, 1L, null, "child content")
+                        tuple(2L, 1L, 1L, "child content")
                 );
         then(articleCommentRepository).should().findByArticle_Id(articleId);
     }
@@ -180,7 +180,7 @@ class ArticleCommentServiceTest {
                 createUserAccount(),
                 content
         );
-        ReflectionTestUtils.setField(articleComment, "id ", id);
+        ReflectionTestUtils.setField(articleComment, "id", id);
 
         return articleComment;
     }
@@ -201,7 +201,7 @@ class ArticleCommentServiceTest {
                 "title",
                 "content"
         );
-        ReflectionTestUtils.setField(article, "id ", 1L);
+        ReflectionTestUtils.setField(article, "id", 1L);
         article.addHashtags(Set.of(createHashtag(article)));
         return article;
     }

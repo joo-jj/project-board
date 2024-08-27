@@ -4,14 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @ToString(callSuper = true)
@@ -20,7 +16,6 @@ import java.util.Objects;
         @Index(columnList = "createdAt"),
         @Index(columnList = "createdBy")
 })
-//@EntityListeners(AuditingEntityListener.class)
 @Entity
 public class ArticleComment  extends AuditingFields{
 
@@ -37,28 +32,34 @@ public class ArticleComment  extends AuditingFields{
     @JoinColumn(name = "userId")
     private UserAccount userAccount; // 유저 정보 (ID)
 
-    @Setter @Column(nullable = false, length = 500) private String content; // 본분
+    @Setter
+    @Column(updatable = false)
+    private Long parentCommentId; // 부모 댓글 ID
 
-//    @CreatedDate
-//    @Column(nullable = false) private LocalDateTime createdAt; // 생성일시
-//    @CreatedBy
-//    @Column(nullable = false, length = 100) private String createdBy; // 생성자
-//    @LastModifiedDate
-//    @Column(nullable = false) private LocalDateTime modifiedAt; // 수정일시
-//    @LastModifiedBy
-//    @Column(nullable = false, length = 100) private String modifiedBy; // 수정자
+    @ToString.Exclude
+    @OrderBy("createdAt ASC")
+    @OneToMany(mappedBy = "parentCommentId", cascade = CascadeType.ALL)
+    private Set<ArticleComment> childComments = new LinkedHashSet<>();
+
+    @Setter @Column(nullable = false, length = 500) private String content; // 본문
 
     protected ArticleComment() {
     }
 
-    private ArticleComment(Article article, UserAccount userAccount, String content) {
+    private ArticleComment(Article article, UserAccount userAccount, Long parentCommentId, String content) {
         this.article = article;
         this.userAccount = userAccount;
+        this.parentCommentId = parentCommentId;
         this.content = content;
     }
 
     public static ArticleComment of(Article article, UserAccount userAccount, String content) {
-        return new ArticleComment(article, userAccount, content);
+        return new ArticleComment(article, userAccount, null, content);
+    }
+
+    public void addChildComment(ArticleComment child) {
+        child.setParentCommentId(this.getId());
+        this.getChildComments().add(child);
     }
 
     @Override
@@ -70,6 +71,6 @@ public class ArticleComment  extends AuditingFields{
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(this.getId());
+        return Objects.hash(this.getId());
     }
 }
